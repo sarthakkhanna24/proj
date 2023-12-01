@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Forms</h2>
+
+<form action="" class="employee"> 
+  <label for="fname">First name:</label><br>
+  <input type="text" id="fname" name="fname" value=""><br>
+  <label for="lname">Last name:</label><br>
+  <input type="text" id="lname" name="lname" value=""><br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+<div class="row">
+    <input type="button" onclick="BtnClick()" value="click me" />
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script>
+        let fname;
+        let lname;
+
+        document.getElementsByClassName('employee')[0].addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Get form values
+            fname = document.getElementById("fname").value;
+            lname = document.getElementsByClassName("lname").value;
+            
+            // Create data object
+            data = {
+                Name: fname,
+                Lname: lname,
+            };
+            console.log(fname);
+
+
+            const dataSend = JSON.stringify(data);
+            var xhr = new XMLHttpRequest();
+
+
+            xhr.open("Post", "http://localhost:3000/createPost")
+
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log("request successful ...");
+                    console.log(xhr.responseText);
+                    console.log(JSON.parse(xhr.responseText));
+
+
+                }
+                else {
+                    console.log("failed", xhr.status);
+                }
+            }
+            xhr.onerror = function () {
+                console.log("request")
+
+            }
+            xhr.send(dataSend);
+
+        })
+
+function BtnClick() {
+      $.ajax({
+        url: "http://localhost:3000/getAllPost",
+        method: "GET",
+        success: function (data) {
+          for (let index = 0; index < data.length; index++) {
+            document.write(data[index].id + "=>" + data[index].Name +"</br>" +"  written by  "+ data[index].Lname + "</br>")
+
+          }
+        },
+        error: function (err) {
+          console.error(err);
+        }
+
+      })
+}
+</script>
+
+</body>
+</html>
+
